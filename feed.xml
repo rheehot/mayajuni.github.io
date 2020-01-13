@@ -6,7 +6,7 @@
   <link href="/feed.xml" rel="self"/>
   
   <link href="https://mayajuni.github.io/"/>
-  <updated>2019-09-24T09:41:04.925Z</updated>
+  <updated>2020-01-13T02:53:58.492Z</updated>
   <id>https://mayajuni.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Fronend AWS S3, Cloudfront, Route 53환경 설정(vue, angular, react 등)</title>
+    <link href="https://mayajuni.github.io/2020/01/13/Fronend-AWS-S3-Cloudfront-Route-53%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95-vue-angular-react-%EB%93%B1/"/>
+    <id>https://mayajuni.github.io/2020/01/13/Fronend-AWS-S3-Cloudfront-Route-53환경-설정-vue-angular-react-등/</id>
+    <published>2020-01-13T02:47:00.000Z</published>
+    <updated>2020-01-13T02:53:58.492Z</updated>
+    
+    <content type="html"><![CDATA[<p>Frontend(vue, react, angular 등등)를 개발을 하고 서비스를 하기 위한 AWS 환경 설정 및 배포에 대해서 글을 남깁니다. </p><h2 id="아키텍처"><a href="#아키텍처" class="headerlink" title="아키텍처"></a>아키텍처</h2><p>단순하게 SSR이 아니기 때문에 따로 서버를 두고 관리하기 보다는 S3에 파일을 올리고 그에 맞게 CDN인 Coundfront와 연결 후 Route53을 이용해서 도메인까지 연결하는 구조로 생각을 했습니다. 그리고 배포 시스템으로는 Codepipeline을 이용해서 배포 하는 방법을 채택했습니다. </p><p><strong>개발자</strong></p><ol><li>개발 소스 GitHub 배포</li><li>CodeCommit이 Webhook을 이용 Github 확인</li><li>CodeBuild를 이용하여 빌드(ex. npm run build와 같은 것 등등)</li><li>CodeDeploy를 이용해서 S3 배포</li><li>S3를 배포가 완료 되면 Lambda를 실행 시켜 CloudFront 캐시 초기화</li></ol><p><strong>고객</strong></p><ol><li><p><a href="http://www.example.com" target="_blank" rel="noopener">www.example.com</a> 접속시 DNS 접속(Route53)</p></li><li><p>Route53에 연결된 CNS(CloudFront) 호출</p></li><li><p>캐싱이 되어 있으면 캐싱된 부분으로 리턴 안되어 있으면 S3 접근 후 리턴</p></li></ol><h2 id="아키텍처에-따른-환경-설정"><a href="#아키텍처에-따른-환경-설정" class="headerlink" title="아키텍처에 따른 환경 설정"></a>아키텍처에 따른 환경 설정</h2><p>CloudFormation을 이용해서 배포 하는 방법이 있지만 아직 그 부분은 익숙하지 않아서 아래와 같이 직접 배포를 하게 되었습니다.</p><h3 id="1-S3"><a href="#1-S3" class="headerlink" title="1. S3"></a>1. S3</h3><h4 id="1-저장소-생성"><a href="#1-저장소-생성" class="headerlink" title="1) 저장소 생성"></a>1) 저장소 생성</h4><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/%EB%B2%84%ED%82%B7%EC%83%9D%EC%84%B1.png?raw=true" alt="버킷생성"></p><p>위의 이미지의 버킷 만들기를 클릭 후 배킷을 생성 합니다.</p><blockquote><p>생성시 꼭 퍼블릭 액세스 차단은 비활성화를 하셔야됩니다.</p></blockquote><h4 id="2-정책-설정"><a href="#2-정책-설정" class="headerlink" title="2) 정책 설정"></a>2) 정책 설정</h4><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/%EB%B2%84%ED%82%B7%EC%A0%95%EC%B1%85.png?raw=true" alt="정책설정"></p><p>만든 버킷에 접속 후에 해당 권한 탭 -&gt; 버킷 정책을 클릭후 아래와 같은 정책을 입력 합니다. 그냥 해당 정책은 읽기 권한을 퍼블릭하게 오픈 한다는 의미 입니다.</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"Version"</span>: <span class="string">"2008-10-17"</span>,</span><br><span class="line">    <span class="attr">"Statement"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"Sid"</span>: <span class="string">"Stmt1484315864175"</span>,</span><br><span class="line">            <span class="attr">"Effect"</span>: <span class="string">"Allow"</span>,</span><br><span class="line">            <span class="attr">"Principal"</span>: <span class="string">"*"</span>,</span><br><span class="line">            <span class="attr">"Action"</span>: <span class="string">"s3:GetObject"</span>,</span><br><span class="line">            <span class="attr">"Resource"</span>: <span class="string">"arn:aws:s3:::버킷명/*"</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="3-정책-설정"><a href="#3-정책-설정" class="headerlink" title="3) 정책 설정"></a>3) 정책 설정</h4><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/%EC%86%8D%EC%84%B1%EC%84%A4%EC%A0%95.png?raw=true" alt="정책설정"></p><p>속성 탭에 있는 정적 웹사이트 호스팅을 위와 같이 설정합니다.</p><h3 id="2-CloudFront-설정"><a href="#2-CloudFront-설정" class="headerlink" title="2. CloudFront 설정"></a>2. CloudFront 설정</h3><h4 id="1-생성"><a href="#1-생성" class="headerlink" title="1) 생성"></a>1) 생성</h4><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/CF-1.png?raw=true" alt="cf생성"></p><p>위의 Create Distribution을 클릭 합니다.</p><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/CF-2.png?raw=true" alt="Web 선택"></p><p>Web 부분의 Get Started를 클립합니다. (저희는 Web 이니깐요)</p><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/CF-3.png?raw=true" alt="Web 선택"></p><ol><li><strong>Origin Domain Name</strong><br> 여기에 위의 S3 속성 설정의 앤드포인트(URL주소)를 가지고 와서 붙여 넣기 합니다.(url 주소를 넣는거지 버킷 아이디를 넣으면 안됩니다.)<br>Ex) <a href="http://dev-front-itam.store-admin.s3-website.ap-northeast-2.amazonaws.com/" target="_blank" rel="noopener">http://dev-front-itam.store-admin.s3-website.ap-northeast-2.amazonaws.com/</a></li><li>다른 부분은 굳이 입력 하지 않아도 됩니다.</li></ol><blockquote><p>여기에서 버킷을 안넣고 주소를 넣는 웹서비스 이기 때문입니다. 특히 권한 문제.</p></blockquote><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/CF-4.png?raw=true" alt="Web 선택"></p><ol><li><strong>Viewer Protocol Policy</strong><br><strong>Redirect HTTP to HTTPS</strong> 을 선택해주세요.</li><li><strong>Object Caching</strong><br>caching에 대한 설정을 다르게 하고 싶으시면 이 부분을 Customize로 설정후 아래의 활성된 값을 넣으면 됩니다. 굳이 안하려면 위의 사진과 같이 확인 하시면 되요.</li></ol><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/CF-5.png?raw=true" alt="Web 선택"></p><ol><li><strong>Price Class</strong><br>기본 값인 Use All Edge Locations를 선택합니다. 물론 나의 타켓은 확고하고 정해져 있다 라고 하면 다른 값으로 설정 하셔도 됩니다.</li><li><strong>Alternate Domain Names (CNAMEs)</strong><br>서비스할 도메인을 넣으면 됩니다. 복수도 가능합니다. 여러개의 도메인을 사용시 한줄 씩 쓰면 됩니다.<br>Ex) dev.example.com</li><li>서비스할 도메인이 있을시 <strong>SSL Certificate</strong>의 Custom SSL Certificate (example.com)을 선택 후 인증서를 넣으면 됩니다.(인증서는 바로 아래의 버튼을 클릭후 설정이 가능합니다.)</li></ol><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/CF-6.png?raw=true" alt="Web 선택"></p><p>여기까지 왔으면 다온거라고 보시면 되요. 여기서는 간단하게 Comment만 적어 두고 끝내면 됩니다.(관리 하기 편하게 해당 서비스 명을 넣는걸 추천드립니다.)</p><h4 id="2-SPA-관련-세팅"><a href="#2-SPA-관련-세팅" class="headerlink" title="2) SPA 관련 세팅"></a>2) SPA 관련 세팅</h4><p> SPA는 말 그대로 싱글페이지 어플리케이션이기 때문에 모든 부분을 index.html로 가게 해야됩니다. 지금 이 설정을 하지 많으면 404 에러가 뜨게 됩니다.</p><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/CF-error.png?raw=true" alt="Web 선택"></p><p>위의 Create Custom Error Response를 클립해주세요.</p><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/CF-error-2.png?raw=true" alt="Web 선택"></p><p>위의 사진과 같이 404 관련된 에러는 전부 /index.html로 가게 해주면됩니다. 여기에서 주의 깊게 볼 부분은 꼭 TTL은 0으로 셋팅해주셔야 됩니다. 안그러면 기다림이 발생됩니다.</p><h3 id="Route53"><a href="#Route53" class="headerlink" title="Route53"></a>Route53</h3><p> 여기에서는 DNS 설정이 되한 부분은 제외하고 설명 하겠습니다. 되게 간단합니다.</p><p><img src="https://github.com/mayajuni/images/blob/master/blog/aws/route53.png?raw=true" alt="Web 선택"></p><ol><li>이름에 서브 도메인을 입력합니다(CloudFront에서 넣은 도메인 명).</li><li>별칭을 클릭하면 Cloudfront영역에 선택 할 수 있는 주소가 생성이 되어 있습니다. 해당 부분을 선택합니다.</li></ol><p>위와 같이 하면 Route53은 설정이 끝납니다.</p><h2 id="마치며"><a href="#마치며" class="headerlink" title="마치며"></a>마치며</h2><p>처음 하는 입장이면 생각보다 어렵다고 느껴지실수 있습니다. </p><p>직접 해보고 익숙해지면 쉽게 하실 수 있다고 생각이 듭니다. 위의 CloudFront 부분에서 도메인 인증서 하는 부분이 빠지긴 했지만 그 부분은 그냥 버튼을 클릭 한후에 하라는대로 따라하면 됩니다.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Frontend(vue, react, angular 등등)를 개발을 하고 서비스를 하기 위한 AWS 환경 설정 및 배포에 대해서 글을 남깁니다. &lt;/p&gt;
+&lt;h2 id=&quot;아키텍처&quot;&gt;&lt;a href=&quot;#아키텍처&quot; class=&quot;headerlink&quot; ti
+      
+    
+    </summary>
+    
+    
+      <category term="AWS" scheme="https://mayajuni.github.io/categories/AWS/"/>
+    
+    
+      <category term="aws" scheme="https://mayajuni.github.io/tags/aws/"/>
+    
+      <category term="frontend" scheme="https://mayajuni.github.io/tags/frontend/"/>
+    
+  </entry>
   
   <entry>
     <title>EosJS API 사용</title>

@@ -8,6 +8,13 @@
     </url>
 
     <url>
+        <loc>https://mayajuni.github.io/categories/AWS/</loc>
+        <lastmod>2020-01-13T02:53:58.492Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>https://mayajuni.github.io/categories/eos/eosjs/</loc>
         <lastmod>2019-09-24T09:41:04.925Z</lastmod>
         <changefreq>weekly</changefreq>

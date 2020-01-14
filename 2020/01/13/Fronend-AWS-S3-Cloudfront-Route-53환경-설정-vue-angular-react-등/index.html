@@ -14,7 +14,7 @@
 <meta property="og:description" content="Frontend(vue, react, angular 등등)를 개발을 하고 서비스를 하기 위한 AWS 환경 설정 및 배포에 대해서 글을 남깁니다.  아키텍처단순하게 SSR이 아니기 때문에 따로 서버를 두고 관리하기 보다는 S3에 파일을 올리고 그에 맞게 CDN인 Coundfront와 연결 후 Route53을 이용해서 도메인까지 연결하는 구조로 생각을 했습니다">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://mayajuni.github.io/images/tyle-blo-02.png">
-<meta property="og:updated_time" content="2020-01-13T05:17:19.903Z">
+<meta property="og:updated_time" content="2020-01-14T06:57:40.181Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Frontend 개발 후 AWS에 서비스 배포하기">
 <meta name="twitter:description" content="Frontend(vue, react, angular 등등)를 개발을 하고 서비스를 하기 위한 AWS 환경 설정 및 배포에 대해서 글을 남깁니다.  아키텍처단순하게 SSR이 아니기 때문에 따로 서버를 두고 관리하기 보다는 S3에 파일을 올리고 그에 맞게 CDN인 Coundfront와 연결 후 Route53을 이용해서 도메인까지 연결하는 구조로 생각을 했습니다">
@@ -193,7 +193,7 @@ ga('send', 'pageview');
 <p><strong>개발자</strong></p>
 <ol>
 <li>개발 소스 GitHub 배포</li>
-<li>CodeCommit이 Webhook을 이용 Github 확인</li>
+<li>CodePipeline에서 Webhook을 이용 Github 확인</li>
 <li>CodeBuild를 이용하여 빌드(ex. npm run build와 같은 것 등등)</li>
 <li>CodeDeploy를 이용해서 S3 배포</li>
 <li>S3를 배포가 완료 되면 Lambda를 실행 시켜 CloudFront 캐시 초기화</li>

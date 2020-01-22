@@ -5,19 +5,19 @@
     
     <title>Serverless를 선택한 이유(Lambda, Altas) | Dongjun&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="CTO를 맡으면서 제가 선택하고 실무에 적용하면서 경험한 Serverless에 대해서 글을 남기려고 합니다. Serverless? 여기에 와서 글을 읽으시는 분들은 Serverless가 무엇인지 충분히 알고 있을꺼라고 생각합니다. 그래도 간단하게만 애기한다면 진짜 Server가 없는 것은 아니고 Server를 신경 쓰지 않아도 서비스를 할 수 있게 하는">
+    <meta name="description" content="CTO를 맡으면서 제가 선택하고 실무에 적용하면서 경험한 Serverless에 대해서 글을 남기려고 합니다. Serverless? 여기에 와서 글을 읽으시는 분들은 Serverless가 무엇인지 충분히 알고 있을 거라고 생각합니다. 그래도 간단하게만 얘기한다면 진짜 Server가 없는 것은 아니고 Server를 신경 쓰지 않아도 서비스를 할 수 있게 하는">
 <meta name="keywords" content="aws,lambda,serverless,server">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Serverless를 선택한 이유(Lambda, Altas)">
 <meta property="og:url" content="https://mayajuni.github.io/2020/01/17/Lambda를-선택한-이유/index.html">
 <meta property="og:site_name" content="Dongjun&#39;s Blog">
-<meta property="og:description" content="CTO를 맡으면서 제가 선택하고 실무에 적용하면서 경험한 Serverless에 대해서 글을 남기려고 합니다. Serverless? 여기에 와서 글을 읽으시는 분들은 Serverless가 무엇인지 충분히 알고 있을꺼라고 생각합니다. 그래도 간단하게만 애기한다면 진짜 Server가 없는 것은 아니고 Server를 신경 쓰지 않아도 서비스를 할 수 있게 하는">
+<meta property="og:description" content="CTO를 맡으면서 제가 선택하고 실무에 적용하면서 경험한 Serverless에 대해서 글을 남기려고 합니다. Serverless? 여기에 와서 글을 읽으시는 분들은 Serverless가 무엇인지 충분히 알고 있을 거라고 생각합니다. 그래도 간단하게만 얘기한다면 진짜 Server가 없는 것은 아니고 Server를 신경 쓰지 않아도 서비스를 할 수 있게 하는">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://mayajuni.github.io/images/tyle-bfw-02.png">
-<meta property="og:updated_time" content="2020-01-22T01:54:23.658Z">
+<meta property="og:updated_time" content="2020-01-22T08:11:22.253Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Serverless를 선택한 이유(Lambda, Altas)">
-<meta name="twitter:description" content="CTO를 맡으면서 제가 선택하고 실무에 적용하면서 경험한 Serverless에 대해서 글을 남기려고 합니다. Serverless? 여기에 와서 글을 읽으시는 분들은 Serverless가 무엇인지 충분히 알고 있을꺼라고 생각합니다. 그래도 간단하게만 애기한다면 진짜 Server가 없는 것은 아니고 Server를 신경 쓰지 않아도 서비스를 할 수 있게 하는">
+<meta name="twitter:description" content="CTO를 맡으면서 제가 선택하고 실무에 적용하면서 경험한 Serverless에 대해서 글을 남기려고 합니다. Serverless? 여기에 와서 글을 읽으시는 분들은 Serverless가 무엇인지 충분히 알고 있을 거라고 생각합니다. 그래도 간단하게만 얘기한다면 진짜 Server가 없는 것은 아니고 Server를 신경 쓰지 않아도 서비스를 할 수 있게 하는">
 <meta name="twitter:image" content="https://mayajuni.github.io/images/tyle-bfw-02.png">
 <link rel="publisher" href="mayajuni10@gmail.com">
 <meta property="fb:admins" content="100000731937646">
@@ -189,121 +189,121 @@ ga('send', 'pageview');
             
             
             <p><img src="/images/tyle-bfw-02.png" alt><br> CTO를 맡으면서 제가 선택하고 실무에 적용하면서 경험한 Serverless에 대해서 글을 남기려고 합니다.</p>
-<h2 id="Serverless"><a href="#Serverless" class="headerlink" title="Serverless?"></a>Serverless?</h2><p> 여기에 와서 글을 읽으시는 분들은 Serverless가 무엇인지 충분히 알고 있을꺼라고 생각합니다. 그래도 간단하게만 애기한다면 진짜 Server가 없는 것은 아니고 Server를 신경 쓰지 않아도 서비스를 할 수 있게 하는 기술이라고 보면 됩니다.<br> 조금 더 있어 보이게 애기한다면 <strong><em>애플리케이션 개발자가 서버를 프로비저닝하거나 애플리케이션의 확장을 관리할 필요가 없는 클라우드 컴퓨팅 모델을 가리킵니다.</em></strong><br> 여기에서 저는 실무에 적용하고 경험한 Lambda와 Mongodb Atlas 등 Serverless를 선택한 이유와 그에 대한 글을 남길까 합니다.</p>
-<h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><p> 람다는 AWS에서 만든 <strong><em>서버를 프로비저닝하거나 관리하지 않고도 코드를 실행할 수 있게 해주는 컴퓨팅 서비스</em></strong>입니다. 솔찍히 말이 조금 어렵지만 단순하게 서버 관리가 필요 없이 함수를 실행해 주는 놈? 이라고 생각하는게 편합니다. </p>
-<p><strong>람다를 사용 했을 시 장점은 무엇이 있을까?</strong></p>
+<h2 id="Serverless"><a href="#Serverless" class="headerlink" title="Serverless?"></a>Serverless?</h2><p> 여기에 와서 글을 읽으시는 분들은 Serverless가 무엇인지 충분히 알고 있을 거라고 생각합니다. 그래도 간단하게만 얘기한다면 진짜 Server가 없는 것은 아니고 Server를 신경 쓰지 않아도 서비스를 할 수 있게 하는 기술이라고 보면 됩니다.<br> 조금 더 있어 보이게 얘기한다면 <strong><em>애플리케이션 개발자가 서버를 프로비저닝하거나 애플리케이션의 확장을 관리할 필요가 없는 클라우드 컴퓨팅 모델을 가리킵니다.</em></strong><br> 여기에서 저는 실무에 적용하고 경험한 Lambda와 Mongodb Atlas 등 Serverless를 선택한 이유와 그에 대한 글을 남길까 합니다.</p>
+<h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><p> 람다는 AWS에서 만든 <strong><em>서버를 프로비저닝하거나 관리하지 않고도 코드를 실행할 수 있게 해주는 컴퓨팅 서비스</em></strong>입니다. 솔직히 말이 조금 어렵지만 단순하게 서버 관리가 필요 없이 함수를 실행해 주는 놈? 이라고 생각하는 게 편합니다.</p>
+<p><strong>람다를 사용했을 시 장점은 무엇이 있을까?</strong></p>
 <ol>
 <li>개발에만 집중 할 수 있는 환경이 됩니다.</li>
-<li>서버에 대해서 고민을 할 필요가 없습니다. (오토스캐일링부터 다양한 관점에서..)</li>
-<li>비용이 저렴 합니다.</li>
-<li>서버 뿐만 아니라 AWS의 기능에 대한 트리거 및 스케쥴러 등등으로 사용이 가능합니다.(예로 codepipeline에서 s3배포를 완료후 Cloudfront 캐시 초기화 할 때도 사용됩니다.)</li>
+<li>서버에 대해서 고민을 할 필요가 없습니다. (오토스캐일링부터 다양한 관점에서)</li>
+<li>비용이 저렴합니다.</li>
+<li>서버뿐만 아니라 AWS의 기능에 대한 트리거 및 스케줄로 등등으로 사용이 가능합니다. (예로 code pipeline에서 s3 배포를 완료 후 Cloud front 캐시 초기화할 때도 사용됩니다)</li>
 </ol>
 <p><strong>장점만 있으면 좋겠지만 단점도 존재합니다.</strong></p>
 <ol>
-<li>콜드 스타트부분입니다. 최근에 동시성이라는 기능이 추가되어서 많은 좋아지긴 했습니다. 하지만 디비 커넥션과 같은 부분은 콜드 스타트부분에서 초기화 되기 때문에 생각을 해줘야됩니다.</li>
-<li>로그 보는 부분이 매우 불편 합니다. (AWS의 CloudWatch를 통해서 볼 수 있지만 불편합니다.)</li>
+<li>콜드 스타트 부분입니다. 최근에 동시성이라는 기능이 추가되어서 많은 좋아지긴 했습니다. 하지만 디비 커넥션과 같은 부분은 콜드 스타트 부분에서 초기화되기 때문에 생각을 해줘야 됩니다.</li>
+<li>로그 보는 부분이 매우 불편합니다. (AWS의 CloudWatch를 통해서 볼 수 있지만 불편합니다)</li>
 <li>동시 실행에 대한 제한이 있습니다.</li>
 </ol>
-<p><strong>단점을 극본한 저의 경험은?</strong></p>
+<p><strong>단점을 극복 한 저의 경험은?</strong></p>
 <ol>
 <li>콜드 스타트<ul>
-<li>해당 부분은 현재 15분마다 해당 function을 호출해 주는 방법이 가장 좋다고 생각은 듭니다. 하지만 MSA로 구현이 되어 있다면 수많은 function을 호출하는게 비용적인 측면에서 문제가 있을 수 있습니다. 저는 Labmda의 사용을 꼭 MSA로 구현하지 않아도 된다고 생각하기 떄문에 해당 부분은 어떻게 설계 하냐에 따라 달라질꺼라 생각합니다.</li>
+<li>해당 부분은 현재 15분마다 해당 function을 호출해 주는 방법이 가장 좋다는 생각은 듭니다. 하지만 MSA로 구현이 되어 있다면 수많은 function을 호출하는 게 비용적인 측면에서 문제가 있을 수 있습니다. 저는 Lambda의 사용을 꼭 MSA로 구현하지 않아도 된다고 생각하기 때문에 해당 부분은 어떻게 설계하냐에 따라 달라질 거라 생각합니다.</li>
 </ul>
 </li>
 <li>로그 문제<ul>
-<li>lambda를 호출하는 부분에 공통으로 로그를 남기는 부분을 만들어 놓았습니다. 물론 x-ray와 같은 서비스를 사용해도 좋겠지만 그거보다는 직접 호출이 되었을시 그리고 오류가 났을시 등등을 전부 에러 로그 처리 해 놓고 확인하게 하였습니다. 추후에는 ELK를 이용하여 로그 분석 관련해서 작업을 진행 할까 생각도 하고 있습니다.</li>
+<li>lambda를 호출하는 부분에 공통으로 로그를 남기는 부분을 만들어 놓았습니다. 물론 x-ray와 같은 서비스를 사용해도 좋겠지만 그거보다는 직접 호출이 되었을 시 그리고 오류가 났을 시 등등을 전부 에러 로그 처리해 놓고 확인하게 하였습니다. 다음에는 ELK를 이용하여 로그 분석 관련해서 작업을 진행할까 생각도 하고 있습니다.</li>
 </ul>
 </li>
 <li>동시 실행에 대한 제한<ul>
 <li>이 부분은 방법이 없습니다. 미리미리 AWS에 동시 실행에 대한 제한 부분을 풀어 놓으면 됩니다.</li>
 </ul>
 </li>
-<li>제한된 모니터링 툴 <ul>
-<li>Lambda에 대한 모니터링 툴은 많이 부족하고 찾기 힘듭니다. 물론 CloudWatch가 있긴하지만 먼가 부족함이 있다는 것을 느낄 수 있습니다. 아직 이 부분은 저도 CloudWatch를 확인하네요.</li>
+<li>제한된 모니터링 툴<ul>
+<li>Lambda에 대한 모니터링 툴은 많이 부족하고 찾기 힘듭니다. 물론 CloudWatch가 있긴하지만 뭔가 부족함이 있다는 것을 느낄 수 있습니다. 아직 이 부분은 정도 CloudWatch를 확인하네요.</li>
 </ul>
 </li>
 </ol>
 <p><strong>Lambda를 직접 운영/개발을 하면서 알게 된 팁.</strong></p>
 <ol>
-<li>Lambda layer를 꼭 사용해야 됩니다. <ul>
-<li>layer 같은 경우는 외부 코드나 라이브러리, 모듈등을 사전에 압축하여 하나의 큰 모듈 처럼 사용 할 수 있게 해줍니다.</li>
-<li>layer를 사용하면 deploy 부분에 대한 속도 부분이 극명하게 차이날 정도로 빨라집니다.</li>
+<li>Lambda layer를 꼭 사용해야 합니다.<ul>
+<li>layer 같은 경우는 외부 코드나 라이브러리, 모듈 등을 사전에 압축하여 하나의 큰 모듈처럼 사용 할 수 있게 해줍니다.</li>
+<li>layer를 사용하면 deploy 부분에 대한 속도 부분이 극명하게 차이 날 정도로 빨라집니다.</li>
 </ul>
 </li>
 <li>Serverless Framework 사용 추천<ul>
-<li>이 부분을 팁으로 놓아야되나 고민은 많이 되었습니다. 하지만 다른 프레임워크보다는 다양한 플로그인 지원, 그리고 방대한 커뮤니티 등등이 Lambda 혹은 Serverless를 사용함에 있어서 큰 도움이 되었다고 생각합니다.</li>
+<li>이 부분을 팁으로 놓아야 하나 고민은 많이 되었습니다. 하지만 다른 프레임워크보다는 다양한 플러그인 지원, 그리고 방대한 커뮤니티 등등이 Lambda 혹은 Serverless를 사용하면서 큰 도움이 되었다고 생각합니다.</li>
 </ul>
 </li>
 <li>Codepipeline 사용한 자동배포<ul>
-<li>AWS를 사용해서 배포를 자동화 하면 좋습니다. 보안에 민감할 수 있으니 해당 배포에 대한 권한을 개발자에게 주기보다는 AWS IAM을 이용해서 자동 배포 할시에만 주는걸 추천드립니다.</li>
+<li>AWS를 사용해서 배포를 자동화하면 좋습니다. 보안에 민감할 수 있으니 해당 배포에 대한 권한을 개발자에게 주기보다는 AWS IAM을 이용해서 자동 배포 할시에만 주는걸 추천해 드립니다.</li>
 </ul>
 </li>
 <li>MSA?? 굳이… 상황에 맞게 처리.<ul>
-<li>Lambda를 사용하면 MSA를 해야될꺼 같은 느낌을 받을 수 있지만 굳이 그렇게 할 필요가 없습니다. Monolithic과 비슷하게 1개의 endpoint에 1개의 function으로 해도 됩니다. 제가 추천하는건 적당한 선에서 상황에 맞게 처리하는 것을 추천합니다.</li>
-<li>MSA를 했을시에는 DB 커젝션 수부터 로그 부분 그리고 function이 많아질 경우 그거에 대한 관리 등등을 고민해야됩니다. 또한 콜드스타트 때문에 매번 lambda 호출시 드는 비용에 대해서도 고민할 필요가 있습니다.</li>
-<li>Monolithic으로 했을시에는 너무 방대해진 코드의 용량에 대한 고민을 할 필요가 있습니다. 또한 동시 실행의 제한도 미리미리 신청해서 늘려 놓아야됩니다.</li>
+<li>Lambda를 사용하면 MSA를 해야 될 거 같은 느낌을 받을 수 있지만, 굳이 그렇게 할 필요가 없습니다. Monolithic과 비슷하게 1개의 endpoint에 1개의 function으로 해도 됩니다. 제가 추천하는 건 적당한 선에서 상황에 맞게 처리하는 것을 추천합니다.</li>
+<li>MSA를 했을 때에는 DB 커젝션 수부터 로그 부분 그리고 function이 많아질 경우 그거에 대한 관리 등등을 고민해야 됩니다. 또한 콜드 스타트 때문에 매번 lambda 호출 시 드는 비용에 대해서도 고민할 필요가 있습니다.</li>
+<li>Monolithic으로 했을 때에는 너무 방대해진 코드의 용량에 대해 고민을 할 필요가 있습니다. 또한 동시 실행의 제한도 미리미리 신청해서 늘려 놓아야 됩니다.</li>
 </ul>
 </li>
 </ol>
 <p>** Lambda를 선택한 이유**</p>
-<p>위의 다양한 의견을 내긴했지만 제가 Lambda를 선택한 가장 큰 이유는 서버 관리가 필요하지 않고 개발에 집중 할 수 있는 환경을 구성 할 수 있기 때문입니다. Lambda에서 나오는 단점은 충분히 커버도 가능할꺼라 생각하고요. 비용부분도 저렴합니다. 우선 프리티어와 관계 없이 월 1백만 호출까지는 무료로 알고 있습니다. 호출된 횟수에 맞게 돈을 지불하기 때문에도 저렴하다고 말 할 수 있습니다. 트레픽이 많아지면 많이 비싸진다는 애기도 있긴합니다. 이 부분도 말씀 드리고 싶은것은 우선 Lambda가 아닌 다른 것을 사용해도 트레픽이 많아지면 가격이 비싸집니다. 물론 딱 물리적인 가격만 비교하면 Lambda가 비싸게 느껴질 수 있지만 트레픽 대응에 대한 서버 관리, 인력 고용 등등을 생각도 해야됩니다.(대용량 트레픽에 따른 서버 관리하는 사람을 고용하는 것도 어렵고 급여도 많이 높을꺼라 생각합니다.) 이 모든 비용을 바라본다면 Lambda가 저렴하다고 생각합니다.</p>
-<h2 id="Mongodb-Atlas"><a href="#Mongodb-Atlas" class="headerlink" title="Mongodb Atlas"></a>Mongodb Atlas</h2><p> Mongodb Atlas는 Mongodb management service(MMS)입니다. 말이 어렵게 느껴질 수 있지만 결국 serverless로 mongodb에 대한 모든 관리는 Atlas에서 해준다고 생각하면 편합니다. Lambda랑 비슷합니다. 한때는 Mlab이 가장 유명했지만 mongodb에서 인수를 하면서 서비스가 종료되었습니다. </p>
+<p>위의 다양한 의견을 내긴 했지만 제가 Lambda를 선택한 가장 큰 이유는 서버 관리가 필요하지 않고 개발에 집중 할 수 있는 환경을 구성 할 수 있기 때문입니다. Lambda에서 나오는 단점은 충분히 커버도 가능할 거라 생각하고요. 비용 부분도 저렴합니다. 우선 프리티어와 관계없이 월 1백만 호출까지는 무료로 알고 있습니다. 호출된 횟수에 맞게 돈을 지불하기 때문에도 저렴하다고 말 할 수 있습니다. 트레픽이 많아지면 많이 비싸진다는 애기도 있긴 합니다. 이 부분도 말씀드리고 싶은것은 우선 Lambda가 아닌 다른 것을 사용해도 트레픽이 많아지면 가격이 비싸집니다. 물론 딱 물리적인 가격만 비교하면 Lambda가 비싸게 느껴질 수 있지만 트레픽 대응에 대한 서버 관리, 인력 고용 등등을 생각도 해야 됩니다.(대용량 트레픽에 따른 서버 관리하는 사람을 고용하는 것도 어렵고 급여도 많이 높을 거라 생각합니다) 이 모든 비용을 바라본다면 Lambda가 저렴하다고 생각합니다.</p>
+<h2 id="Mongodb-Atlas"><a href="#Mongodb-Atlas" class="headerlink" title="Mongodb Atlas"></a>Mongodb Atlas</h2><p> Mongodb Atlas는 Mongodb management service(MMS)입니다. 말이 어렵게 느껴질 수 있지만 결국 serverless로 mongodb에 대한 모든 관리는 Atlas에서 해준다고 생각하면 편합니다. Lambda랑 비슷합니다. 한때는 Mlab이 가장 유명했지만 mongodb에서 인수를 하면서 서비스가 종료되었습니다.</p>
 <p>** Mongodb Atals의 장점 **</p>
 <ol>
-<li>가장 좋은건 Mongodb에 대한 관리가 필요 없습니다. Server부터 모든 기능들 전부(리플리카셋, 샤딩 등등)</li>
+<li>가장 좋은 건 Mongodb에 대한 관리가 필요 없습니다. Server부터 모든 기능 전부(리플리카셋, 샤딩 등등)</li>
 <li>모니터링 툴을 따로 쓸 이유가 없습니다.</li>
 <li>알람 또한 너무 잘되어 있어서 빠르게 확인 할 수 있습니다.</li>
-<li>Performance Advisor라는 기능을 제공하여 쿼리 속도 부터 index가 필요한 부분까지 체크해줍니다.</li>
+<li>Performance Advisor라는 기능을 제공하여 쿼리 속도부터 index가 필요한 부분까지 체크해줍니다.</li>
 <li>멀티 리전을 사용할 수 있습니다.</li>
 <li>스토리지에 대한 Auto Scaling을 제공합니다.</li>
-<li>백업에 대해서도 지원합니다.(실시간 백업도 가능, 4.2버젼 이상은 아직 미지원)</li>
+<li>백업에 대해서도 지원합니다. (실시간 백업도 가능, 4.2버전 이상은 아직 미지원)</li>
 </ol>
 <p>** 단점은? **</p>
 <ol>
 <li>비용이 저렴하진 않습니다.</li>
 </ol>
-<p>단점 부분은 솔찍히 비용을 적긴했지만 저는 합리적이라고 생각합니다. 단점을 찾기가 쉽지 않네요..</p>
-<p>** Mongodb Atals를 사용하면서 알게된 팁 **</p>
+<p>단점 부분은 솔직히 비용을 적긴 했지만 저는 합리적이라고 생각합니다. 단점을 찾기가 쉽지 않네요..</p>
+<p>** Mongodb Atals를 사용하면서 알게 된 팁 **</p>
 <ol>
 <li>같은 리전, 같은 클라우드<ul>
-<li>당연한 소리이지만 같은 리전 그리고 같은 클라우드 서비스로 만드는 것을 추천합니다.(이유는 굳이 설명 안하겠습니다.)</li>
+<li>당연한 소리이지만 같은 리전 그리고 같은 클라우드 서비스로 만드는 것을 추천합니다. (이유는 굳이 설명 안 하겠습니다.)</li>
 </ul>
 </li>
 <li>Database Access 권한<ul>
-<li>Database Access 권한인 경우는 모든 클러스트 공통으로 적용이 됩니다. 저희 같은경우 개발 클러스트와 실 클러스트를 운영하는데 Database Access 권한을 주면 둘다 동일하게 적용되었습니다.(다른 방법이 있는데 제가 모르는거 일 수도 있습니다.) 그렇기 때문에 해당 부분을 확인하는게 좋습니다.</li>
+<li>Database Access 권한인 경우는 모든 클러스트 공통으로 적용이 됩니다. 저희 같은 경우 개발 클러스트와 실 클러스트를 운영하는데 Database Access 권한을 주면 둘 다 동일하게 적용되었습니다. (다른 방법이 있는데 제가 모르는 거 일 수도 있습니다) 그렇기 때문에 해당 부분을 확인하는 게 좋습니다.</li>
 </ul>
 </li>
 <li>Network Access 권한<ul>
-<li>Network Access 같은경우 보통 0.0.0.0/0으로 세팅 하는 경우가 있는데 보안상 추천하지 않습니다. 꼭 화이트 리스트로 하는것을 추천합니다.</li>
+<li>Network Access 같은 경우 보통 0.0.0.0/0으로 세팅 하는 경우가 있는데 보안상 추천하지 않습니다. 꼭 화이트 리스트로 하는 것을 추천합니다.</li>
 </ul>
 </li>
 <li>vpc peering<ul>
-<li>VPC peering을 한다고 해서 체감상 속도가 빨라지진 않습니다. 다만 이걸 하는 것을 추천하는 이유는 보안상의 이유가 크다고 볼 수 있습니다. </li>
+<li>VPC peering을 한다고 해서 체감상 속도가 빨라지진 않습니다. 다만 이걸 하는 것을 추천하는 이유는 보안상의 이유가 크다고 볼 수 있습니다.</li>
 </ul>
 </li>
 <li>Performance Advisor 기능<ul>
-<li>Performance Advisor기능을 적극적으로 활용해야됩니다. 정말 신기할 정도로 잘 추천해주고 그에 맞게 처리하면 성능 개선을 확실히 볼 수 있습니다. 다만 초기에 데이터가 없을 시에는 확인이 되지 않을 수 있습니다.</li>
+<li>Performance Advisor 기능을 적극적으로 활용해야 됩니다. 정말 신기할 정도로 잘 추천해주고 그것에 맞게 처리하면 성능 개선을 확실히 볼 수 있습니다. 다만 초기에 데이터가 없을 시에는 확인이 되지 않을 수 있습니다.</li>
 </ul>
 </li>
 <li>스케일 업<ul>
-<li>mongodb 스케일 업시에는 간단하게 버튼만으로 추가 할 수 있습니다. 다만 스케일업 하는 동안은 서비스가 되지 않기 때문에 충분한 공지를 통해 하시는걸 추천드립니다.</li>
+<li>mongodb 스케일 업 시에는 간단하게 버튼만으로 추가 할 수 있습니다. 다만 스케일업 하는 동안은 서비스가 되지 않기 때문에 충분한 공지를 통해서 하시는걸 추천해 드립니다.</li>
 </ul>
 </li>
 </ol>
 <p>** Mongodb Atlas를 선택한 이유**</p>
-<p> 똑같은 소리를 반복 하는 거 일수 있지만 서버관리, 몽고디비의 다양한 기능, 설정 등등을 직접 관리 할 필요가 없고 개발에 집중 할 수 있는 환경을 조성 할 수 있기 때문입니다. 초기에는 Atlas가 아닌 직접 mongodb를 운영도 해보았습니다. EC2 3대와 글로벌 서비스를 위한 버지니아에 read 전용 EC2 2대까지 총 5대를 셋팅하고 운영을 하면서 다양한 버그, 에러 그리고 모니터링 툴의 필요성, 알람의 필요성, 백업 계획 등등을 느끼고 있었지만 개발을 할 수 있는 인력 및 여건이 되지 않아 Atlas로 옮기는 결정을 하고 작업을 했습니다. 옮기고 나서 만족도는 1000000%입니다. 다만 단점이라고 하면 비용에 있습니다. 하지만 위의 부가적인 작업 및  Mongodb에 문제가 있을 시 등등의 기회비용 인력 비용 모든것을 다 합한다고 하면 합리적이라고 생각합니다.</p>
+<p> 똑같은 소리를 반복하는 거일 수 있지만 서버 관리, 몽고디비의 다양한 기능, 설정 등등을 직접 관리할 필요가 없고 개발에 집중 할 수 있는 환경을 조성 할 수 있기 때문입니다. 초기에는 Atlas가 아닌 직접 mongodb를 운영도 해보았습니다. EC2 3대와 글로벌 서비스를 위한 버지니아에 read 전용 EC2 2대까지 총 5대를 세팅하고 운영을 하면서 다양한 버그, 에러 그리고 모니터링 툴의 필요성, 알람의 필요성, 백업 계획 등등을 느끼고 있었지만, 개발을 할 수 있는 인력 및 여건이 되지 않아 Atlas로 옮기는 결정을 하고 작업을 했습니다. 옮기고 나서 만족도는 1,000,000%입니다. 다만 단점이라고 하면 비용에 있습니다. 하지만 위의 부가적인 작업 및  Mongodb에 문제가 있을 시 등등의 기회비용 인력 비용 모든 것을 다 합한다고 하면 합리적이라고 생각합니다.</p>
 <h3 id="Serverless-왜-선택했냐"><a href="#Serverless-왜-선택했냐" class="headerlink" title="Serverless 왜 선택했냐?"></a>Serverless 왜 선택했냐?</h3><p> Serverless를 선택한 이유는 아래와 같습니다.</p>
 <ol>
 <li>개발에 집중하는 환경<ul>
-<li>많은 스타트업이 그렇겠지만 개발자는 뽑기 힘들고 많이 있지 않습니다.(어디 있나요..?) 많지 않은 인력으로 서비스 개발만 해도 시간이 부족합니다. 그렇기 때문에 개발에 집중할 수 있는 환경을 조성하기 위한 하나의 선택지라 생각합니다.</li>
+<li>많은 스타트업이 그렇겠지만 개발자는 뽑기 힘들고 많이 있지 않습니다. (어디 있나요..?) 많지 않은 인력으로 서비스 개발만 해도 시간이 부족합니다. 그렇기 때문에 개발에 집중할 수 있는 환경을 조성하기 위한 하나의 선택지라 생각합니다.</li>
 </ul>
 </li>
 <li>Serverless에서 제공하는 기능들<ul>
-<li>Lambda, Atlas에서 제공하는 기능들은 정말 꿀과 같습니다.(특히 Atlas) 이런 기능들은 직접 만들고 유지하고 운영하기에는 저희는 인력도 부족하고 시간도 부족합니다.</li>
+<li>Lambda, Atlas에서 제공하는 기능들은 정말 꿀과 같습니다. (특히 Atlas) 이런 기능들은 직접 만들고 유지하고 운영하기에는 저희는 인력도 부족하고 시간도 부족합니다.</li>
 </ul>
 </li>
 <li>합리적인 비용<ul>
-<li>물리적인 하드웨어를 따지고 보면 비싸게 느껴질수 있지만 모든 기회비용까지 생각하면 오히려 저렴하다고 생각합니다.(개발자 몸값만 생각해도…)</li>
+<li>물리적인 하드웨어를 따지고 보면 비싸게 느껴질 수 있지만 모든 기회비용까지 생각하면 오히려 저렴하다고 생각합니다. (개발자 몸값만 생각해도…)</li>
 </ul>
 </li>
 <li>전문 지식<ul>
@@ -311,6 +311,7 @@ ga('send', 'pageview');
 </ul>
 </li>
 </ol>
+<h3 id="마무리하며"><a href="#마무리하며" class="headerlink" title="마무리하며."></a>마무리하며.</h3><p> 다양한 서비리스 중 2가지만 애기하기 했지만 다른 좋은 서버리스도 많습니다. 상황에 맞게 그리고 비즈니스에 맞게 잘 활용한다면 아주 큰 도움이 될 수 있다고 생각합니다.</p>
 
             
         </div>
